@@ -1,0 +1,4 @@
+candidate_id,name,experience,skills,education,platform_activity,behavioral_signals
+C1,Alice Smith,"5 years as a Backend Engineer at TechCorp. Expert in Python, FastAPI, and AWS.","Python,FastAPI,AWS,PostgreSQL,Docker",BS in Computer Science,Active contributor to several open source Python libraries.,"Strong leadership qualities, mentored 3 junior developers."
+C2,Bob Jones,2 years as a Junior Developer. Familiar with Java and Spring Boot.,"Java,Spring Boot,MySQL",BS in IT,Occasional blogger on tech trends.,"Quick learner, eager to take on new challenges."
+C3,Charlie Brown,8 years as a Senior Software Architect. Deep knowledge of distributed systems and Go.,"Go,Kubernetes,Distributed Systems,gRPC,Redis",MS in Computer Science,Maintainer of a popular Go networking library.,"Strategic thinker, excellent at system design."

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Recruit — Hybrid Intelligence Ranking</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css?v=8" />
+</head>
+<body>
+  <!-- Interactive Background Canvas -->
+  <canvas id="particle-canvas"></canvas>
+
+  <!-- ═══════════════════ NAVBAR ═══════════════════ -->
+  <nav class="navbar" id="navbar">
+    <a href="#" class="navbar__brand">
+      <svg class="navbar__logo" width="28" height="28" viewBox="0 0 28 28" fill="none">
+        <circle cx="14" cy="14" r="12" stroke="url(#brandGrad)" stroke-width="2.5" fill="none"/>
+        <path d="M10 18V10l4 4 4-4v8" stroke="url(#brandGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <defs><linearGradient id="brandGrad" x1="0" y1="0" x2="28" y2="28"><stop stop-color="#1e3a5f"/><stop offset="1" stop-color="#d4913d"/></linearGradient></defs>
+      </svg>
+      <span class="navbar__brand-text">AI Recruit</span>
+    </a>
+    <div class="navbar__links">
+      <a href="#upload-section" class="navbar__link navbar__link--active">Dashboard</a>
+      <a href="#footer" class="navbar__link">About</a>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════ HERO / UPLOAD ═══════════════════ -->
+  <section class="hero" id="upload-section">
+    <div class="hero__header fade-in">
+      <h1 class="hero__title">Find Your <span class="gradient-text">Perfect Candidate</span></h1>
+      <p class="hero__subtitle fade-in fade-in--delay-1">
+        Upload candidate profiles and job descriptions — our <span style="color:var(--accent-soft);">interactive hybrid AI</span> ranks the best matches instantly.
+      </p>
+    </div>
+
+    <div class="upload-row fade-in fade-in--delay-1">
+      <!-- Candidates CSV -->
+      <div class="upload-zone scroll-reveal reveal-left" id="zone-candidates" tabindex="0">
+        <input type="file" id="file-candidates" accept=".csv" hidden />
+        <div class="upload-zone__icon">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+            <rect x="4" y="6" width="32" height="28" rx="4" stroke="#1e3a5f" stroke-width="2" fill="none"/>
+            <path d="M14 22l6-6 6 6M20 16v12" stroke="#1e3a5f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="10" y="10" width="6" height="2" rx="1" fill="#d4913d" opacity="0.6"/>
+          </svg>
+        </div>
+        <p class="upload-zone__label">Upload Candidates CSV</p>
+        <p class="upload-zone__hint">Drag & drop or <span class="upload-zone__browse">browse</span></p>
+        <p class="upload-zone__file" id="filename-candidates"></p>
+      </div>
+
+      <!-- Job Description CSV -->
+      <div class="upload-zone scroll-reveal reveal-right" id="zone-jd" tabindex="0">
+        <input type="file" id="file-jd" accept=".csv" hidden />
+        <div class="upload-zone__icon">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+            <rect x="6" y="4" width="28" height="32" rx="4" stroke="#d4913d" stroke-width="2" fill="none"/>
+            <path d="M14 16h12M14 22h8M14 28h10" stroke="#d4913d" stroke-width="2" stroke-linecap="round"/>
+            <path d="M22 4v8h8" stroke="#d4913d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </div>
+        <p class="upload-zone__label">Upload Job Description CSV</p>
+        <p class="upload-zone__hint">Drag & drop or <span class="upload-zone__browse">browse</span></p>
+        <p class="upload-zone__file" id="filename-jd"></p>
+      </div>
+    </div>
+
+    <div class="hero__actions fade-in fade-in--delay-2">
+      <button class="btn btn--primary" id="btn-rank" disabled>
+        <svg class="btn__icon" width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path d="M3 13l4-4 3 3 5-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Rank Candidates
+      </button>
+      <button class="btn-link" id="btn-sample">Use Sample Data</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ LOADING OVERLAY ═══════════════════ -->
+  <div class="loading-overlay" id="loading-overlay" hidden>
+    <div class="spinner"></div>
+    <p class="loading-text">Analyzing candidates with AI…</p>
+  </div>
+
+  <!-- ═══════════════════ JOB DESCRIPTION CARD ═══════════════════ -->
+  <section class="section" id="jd-section" hidden>
+    <div class="glass-card glass-card--jd scroll-reveal reveal-up" id="jd-card">
+      <div class="jd-card__header">
+        <div class="jd-card__icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="2" width="18" height="20" rx="3" stroke="#d4913d" stroke-width="1.5" fill="none"/>
+            <path d="M8 7h8M8 11h6M8 15h4" stroke="#d4913d" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="jd-card__label">Job Description</span>
+      </div>
+      <h2 class="jd-card__title" id="jd-title"></h2>
+      <p class="jd-card__desc" id="jd-desc"></p>
+      <div class="jd-card__meta">
+        <div class="jd-card__meta-block">
+          <h4 class="jd-card__meta-label">Required Skills</h4>
+          <div class="tags" id="jd-skills"></div>
+        </div>
+        <div class="jd-card__meta-block">
+          <h4 class="jd-card__meta-label">Preferred Experience</h4>
+          <p class="jd-card__meta-value" id="jd-experience"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ RANKED CANDIDATES ═══════════════════ -->
+  <section class="section" id="candidates-section" hidden>
+    <div class="section__header scroll-reveal reveal-up">
+      <h2 class="section__title">Ranked Candidates</h2>
+      <span class="section__count" id="candidates-count"></span>
+    </div>
+    <div class="candidates-grid" id="candidates-grid">
+      <!-- Cards injected by JS -->
+    </div>
+  </section>
+
+  <!-- ═══════════════════ FOOTER ═══════════════════ -->
+  <footer class="footer" id="footer">
+    <div class="footer__glow"></div>
+    <p class="footer__text">Powered by <span class="gradient-text">AI Recruit</span> · Hybrid Intelligence Ranking</p>
+  </footer>
+
+  <!-- ═══════════════════ TOAST CONTAINER ═══════════════════ -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="/static/app.js?v=8"></script>
+</body>
+</html>

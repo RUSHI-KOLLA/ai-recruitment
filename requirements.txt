@@ -1,0 +1,9 @@
+sentence-transformers
+pandas
+numpy
+scikit-learn
+openai
+pyyaml
+tqdm
+flask
+flask-cors
